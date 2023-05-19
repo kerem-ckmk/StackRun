@@ -13,9 +13,6 @@ public class GameManager : MonoBehaviour
     [Header("Config")]
     public GameConfigs gameConfigs;
 
-    [Header("Settings")]
-    public bool disableRemoteConfig = false;
-
     public GameState CurrentGameState { get; private set; }
 
     public AudioSource AudioSource { get; private set; }
@@ -103,19 +100,9 @@ public class GameManager : MonoBehaviour
 #else
         Application.targetFrameRate = 60;
 #endif
-
-        if (disableRemoteConfig == false && GameConfigs.Instance.IsRemoteConfigApplied == false)
-            ApplyRemoteConfig();
-
         gameplayController.Initialize();
     }
 
-    private void ApplyRemoteConfig()
-    {
-        gameConfigs.ApplyRemoteConfig();
-
-        //Apply other Remote Config values here
-    }
 
     public void ResetSaveData()
     {

@@ -7,8 +7,6 @@ public class GameConfigs : ScriptableObject
 {
     public static GameConfigs Instance;
 
-    public bool IsRemoteConfigApplied { get; private set; }
-
     [Header("Level")]
     public int LevelSkipCountAtRepeat = 0;
 
@@ -49,10 +47,5 @@ public class GameConfigs : ScriptableObject
         Debug.Assert(Instance == null);
 
         Instance = this;
-    }
-
-    public void ApplyRemoteConfig()
-    {
-        IsRemoteConfigApplied = true;
     }
 }

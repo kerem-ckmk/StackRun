@@ -4794,7 +4794,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 250
+  far clip plane: 200
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -4821,7 +4821,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 8, z: -8}
+  m_LocalPosition: {x: 0, y: 23, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5488,7 +5488,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 600}
+  m_AnchoredPosition: {x: 0, y: 410}
   m_SizeDelta: {x: 0, y: 110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1046958777
@@ -10044,7 +10044,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameplayController: {fileID: 1771699498}
   gameConfigs: {fileID: 11400000, guid: 30dd55db1500c78468288a4c10373d2f, type: 2}
-  disableRemoteConfig: 0
 --- !u!1 &1810397570
 GameObject:
   m_ObjectHideFlags: 0
