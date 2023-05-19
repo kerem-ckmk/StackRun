@@ -61,12 +61,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         AudioSource = this.gameObject.AddComponent<AudioSource>();
-        SRDebug.Instance.PanelVisibilityChanged += SRDebug_PanelVisibilityChanged;
-    }
-
-    private void SRDebug_PanelVisibilityChanged(bool isVisible)
-    {
-        Time.timeScale = isVisible ? 0f : 1f;
     }
 
     private void Start()
@@ -179,7 +173,7 @@ public class GameManager : MonoBehaviour
 
     public void AddCurrency(int currencyAmount, Vector3 worldPosition)
     {
-        Vector2? screenPos = gameplayController.gameCamera.GameCamera.WorldToScreenPoint(worldPosition);
+        Vector2? screenPos = Camera.main.WorldToScreenPoint(worldPosition);
         AddCurrency(currencyAmount, screenPos);
     }
 
@@ -198,22 +192,6 @@ public class GameManager : MonoBehaviour
         {
             AddCurrency(GameConfigs.Instance.AddCurrencyCheatAmount);
         }
-    }
-
-    public bool TryUpgradeItem(UpgradeItemBase upgradeItem)
-    {
-        if (PlayerCurrencyAmount >= upgradeItem.Price)
-        {
-            AddCurrency(-upgradeItem.Price);
-
-            upgradeItem.ApplyUpgradeOneLevel();
-
-            DoHaptic(HapticPatterns.PresetType.MediumImpact, true);
-
-            return true;
-        }
-
-        return false;
     }
 
     public static void DoHaptic(HapticPatterns.PresetType hapticType, bool dominate = false)
