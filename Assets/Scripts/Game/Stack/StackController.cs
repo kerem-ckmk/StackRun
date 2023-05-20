@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class StackController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool IsInitialized { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize(Vector3 position, Vector3 scale)
     {
-        
+        transform.position = position;
+        transform.localScale = scale;
+        IsInitialized = true;
     }
 }

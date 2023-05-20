@@ -6,6 +6,7 @@ public class GameplayController : MonoBehaviour
 {
     [Header("References")]
     public LevelManager levelManager; 
+    public PlayerController playerController;
 
     public bool IsInitialized { get; private set; }
     public bool IsActive { get; private set; }
@@ -20,6 +21,7 @@ public class GameplayController : MonoBehaviour
     public void Initialize()
     {
         levelManager.Initialize();
+        playerController.Initialize();
 
         IsInitialized = true;
     }
