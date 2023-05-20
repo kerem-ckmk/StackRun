@@ -13,19 +13,13 @@ public class GameConfigs : ScriptableObject
     [Header("Economy")]
     public int StartingMoney = 0;
 
-    [Header("Upgrades - Visuals")]
-    public Sprite StartingLevelBackground;
-    public Sprite StartingLevelIcon;
-    public Sprite IncomeBackground;
-    public Sprite IncomeIcon;
+    [Header("Player")]
+    public float PlayerMoveSpeed = 10f;
 
-    [Header("Upgrades - Prices")]
-    public int StartingLevelUpgradePriceMultiplier = 100;
-    public int IncomeUpgradePriceMultiplier = 100;
-
-    [Header("Upgrades - Functionality")]
-    public int StartingLevelMultiplier = 1;
-    public float[] IncomeUpgradeMultipliers;
+    [Header("Stack")]
+    public float DistanceCenter = 5f;
+    public float StackScaleX = 1f;
+    public float StackScaleZ = 1f;
 
     [Header("Haptic")]
     public float HapticIntervalLimit = 0.15f;

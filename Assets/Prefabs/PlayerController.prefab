@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 571021407532478625}
+  playerRigidbody: {fileID: 483963195}
 --- !u!1001 &6234733784812309808
 PrefabInstance:
   m_ObjectHideFlags: 0

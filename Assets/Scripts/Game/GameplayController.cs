@@ -5,8 +5,9 @@ using Lofelt.NiceVibrations;
 public class GameplayController : MonoBehaviour
 {
     [Header("References")]
-    public LevelManager levelManager; 
+    public LevelManager levelManager;
     public PlayerController playerController;
+    public StackManager stackManager;
 
     public bool IsInitialized { get; private set; }
     public bool IsActive { get; private set; }
@@ -22,7 +23,7 @@ public class GameplayController : MonoBehaviour
     {
         levelManager.Initialize();
         playerController.Initialize();
-
+        stackManager.Initialize();
         IsInitialized = true;
     }
 
@@ -34,10 +35,14 @@ public class GameplayController : MonoBehaviour
     public void UnloadGameplay()
     {
         levelManager.UnloadLevel();
+        playerController.UnloadLevel();
+        stackManager.UnloadLevel();
     }
 
     public void StartGameplay()
     {
+        playerController.SetActiveState(true);
+        stackManager.SetActiveState(true);
         IsActive = true;
     }
 
@@ -53,13 +58,5 @@ public class GameplayController : MonoBehaviour
         if (!IsActive)
             return;
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            FinishGameplay(true);
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            FinishGameplay(false);
-        }
     }
 }

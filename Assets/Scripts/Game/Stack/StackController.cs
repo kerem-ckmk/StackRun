@@ -1,15 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StackController : MonoBehaviour
 {
+    public Transform stackVisual;
     public bool IsInitialized { get; private set; }
 
-    public void Initialize(Vector3 position, Vector3 scale)
+    private PositionStatus _currentPositionStatus;
+
+    public void Initialize(float positionZ, float scaleX, float scaleZ, PositionStatus positionStatus = PositionStatus.None)
     {
-        transform.position = position;
-        transform.localScale = scale;
+        _currentPositionStatus = positionStatus;
+        transform.SetPositionZ(positionZ);
+        stackVisual.localScale = new Vector3(scaleX, 1f, scaleZ);
+        ChoosePosition();
         IsInitialized = true;
     }
+
+    public void ChoosePosition()
+    {
+        if (_currentPositionStatus == PositionStatus.None)
+        {
+            int randomNumber = Random.Range(0, 10);
+            _currentPositionStatus = randomNumber % 2 == 0 ? PositionStatus.Left : PositionStatus.Right;
+        }
+
+        float newXPosition = _currentPositionStatus == PositionStatus.Left ? -GameConfigs.Instance.DistanceCenter : GameConfigs.Instance.DistanceCenter;
+        transform.SetPositionX(newXPosition);
+    }
+
+
+    private void Update()
+    {
+        if (!IsInitialized)
+            return;
+
+        
+    }
+    public enum PositionStatus
+    {
+        None,
+        Left,
+        Right
+    }
 }
+

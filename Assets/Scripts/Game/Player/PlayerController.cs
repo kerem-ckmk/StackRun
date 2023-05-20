@@ -13,7 +13,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     public Animator animator;
+    public Rigidbody playerRigidbody;
     public bool IsInitialized { get; private set; }
+    public Vector3 Direction { get; private set; }
+    public bool IsActive { get; private set; }
     private AnimationState _currentAnimationState;
 
     public void Initialize()
@@ -22,31 +25,30 @@ public class PlayerController : MonoBehaviour
         IsInitialized = true;
     }
 
-    private void Update()
+    public void SetActiveState(bool isActive)
     {
-        if (!IsInitialized)
+        if (IsActive == isActive)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ChangeAnimationState(AnimationState.Run);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            ChangeAnimationState(AnimationState.Walk);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            ChangeAnimationState(AnimationState.Dance);
-        }
-        else if (Input.GetKeyDown(KeyCode.F))
-        {
-            ChangeAnimationState(AnimationState.Fall);
-        }
-        else if (Input.GetKeyDown(KeyCode.I))
-        {
-            ChangeAnimationState(AnimationState.Idle);
-        }
+        ChangeAnimationState(AnimationState.Run);
+        IsActive = isActive;
+    }
+
+    public void UnloadLevel()
+    {
+        IsActive = false;
+        animator.Rebind();
+        animator.Update(0f);
+    }
+
+    private void Update()
+    {
+        if (!IsInitialized || !IsActive)
+            return;
+
+        Vector3 targetPosition = transform.position + transform.forward;
+        targetPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * GameConfigs.Instance.PlayerMoveSpeed);
+        playerRigidbody.MovePosition(targetPosition);
     }
 
     private void ChangeAnimationState(AnimationState newState)

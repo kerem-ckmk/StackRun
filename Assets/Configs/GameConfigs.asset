@@ -14,15 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelSkipCountAtRepeat: 0
   StartingMoney: 0
-  StartingLevelBackground: {fileID: 21300000, guid: bd38afb49bce71b4eb54db0083e85b83,
-    type: 3}
-  StartingLevelIcon: {fileID: 21300000, guid: 30ad6b769dbeaa649a34d231c3774d6b, type: 3}
-  IncomeBackground: {fileID: 21300000, guid: bd38afb49bce71b4eb54db0083e85b83, type: 3}
-  IncomeIcon: {fileID: 21300000, guid: 30ad6b769dbeaa649a34d231c3774d6b, type: 3}
-  StartingLevelUpgradePriceMultiplier: 100
-  IncomeUpgradePriceMultiplier: 100
-  StartingLevelMultiplier: 1
-  IncomeUpgradeMultipliers: []
+  PlayerMoveSpeed: 20
+  DistanceCenter: 15
+  StackScaleX: 1
+  StackScaleZ: 1
   HapticIntervalLimit: 0.15
   AddCurrencyCheatAmount: 5000
   EnableCursorImage: 0
