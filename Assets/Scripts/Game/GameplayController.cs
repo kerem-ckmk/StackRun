@@ -58,5 +58,10 @@ public class GameplayController : MonoBehaviour
         if (!IsActive)
             return;
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            stackManager.StopLastStack();
+        }
+
     }
 }

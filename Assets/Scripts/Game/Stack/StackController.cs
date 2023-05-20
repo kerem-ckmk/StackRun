@@ -1,46 +1,71 @@
+using System;
 using UnityEngine;
+using static StackManager;
 
 public class StackController : MonoBehaviour
 {
     public Transform stackVisual;
+    public Renderer visualRenderer;
+    public Collider startCollider;
+    public Collider endCollider;
     public bool IsInitialized { get; private set; }
+    public bool IsStop { get; private set; }
 
-    private PositionStatus _currentPositionStatus;
+    private Vector3 _direction;
+    private float _speed;
+    private StackManager.PositionStatus _currentPositionStatus;
+    private Material _material;
+    public event Action OnCreateNewStack;
+    
 
-    public void Initialize(float positionZ, float scaleX, float scaleZ, PositionStatus positionStatus = PositionStatus.None)
+    public void Initialize(float positionZ, float scaleX, float scaleZ, StackManager.PositionStatus positionStatus, Material stackMaterial)
     {
+        _material = stackMaterial;
+        visualRenderer.sharedMaterial = _material;
         _currentPositionStatus = positionStatus;
-        transform.SetPositionZ(positionZ);
+        ChoosePosition(positionZ);
+
+         _speed = GameConfigs.Instance.PlayerMoveSpeed * 2f;
+
+        startCollider.transform.localScale = new Vector3(scaleX, 1f, 1f);
+        startCollider.enabled = true;
+        endCollider.transform.localScale = new Vector3(scaleX, 1f, 1f);
+        endCollider.enabled = true;
+
         stackVisual.localScale = new Vector3(scaleX, 1f, scaleZ);
-        ChoosePosition();
+
+        IsStop = false;
         IsInitialized = true;
     }
 
-    public void ChoosePosition()
+    public void StopStack()
     {
-        if (_currentPositionStatus == PositionStatus.None)
-        {
-            int randomNumber = Random.Range(0, 10);
-            _currentPositionStatus = randomNumber % 2 == 0 ? PositionStatus.Left : PositionStatus.Right;
-        }
+        IsStop = true;
+    }
 
-        float newXPosition = _currentPositionStatus == PositionStatus.Left ? -GameConfigs.Instance.DistanceCenter : GameConfigs.Instance.DistanceCenter;
-        transform.SetPositionX(newXPosition);
+    public void ChoosePosition(float positionZ)
+    {
+        float positionX = _currentPositionStatus == StackManager.PositionStatus.Left ? 
+            -GameConfigs.Instance.DistanceCenter : GameConfigs.Instance.DistanceCenter;
+
+        _direction = _currentPositionStatus == PositionStatus.Left ? transform.right : -transform.right;
+
+        transform.position = new Vector3(positionX, 0f, positionZ);
+    }
+
+    public void TriggeredStartCollider()
+    {
+        startCollider.enabled = false;
+        OnCreateNewStack?.Invoke();
     }
 
 
     private void Update()
     {
-        if (!IsInitialized)
+        if (!IsInitialized || IsStop)
             return;
 
-        
-    }
-    public enum PositionStatus
-    {
-        None,
-        Left,
-        Right
+        transform.position = Vector3.Lerp(transform.position, transform.position + _direction, Time.deltaTime * _speed);
     }
 }
 

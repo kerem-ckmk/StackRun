@@ -51,6 +51,15 @@ public class PlayerController : MonoBehaviour
         playerRigidbody.MovePosition(targetPosition);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == TagsAndLayers.StackStartIndex)
+        {
+            var stackController = other.GetComponentInParent<StackController>();
+            stackController.TriggeredStartCollider();
+        }
+    }
+
     private void ChangeAnimationState(AnimationState newState)
     {
         if (_currentAnimationState == newState)

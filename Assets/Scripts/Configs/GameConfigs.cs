@@ -20,6 +20,8 @@ public class GameConfigs : ScriptableObject
     public float DistanceCenter = 5f;
     public float StackScaleX = 1f;
     public float StackScaleZ = 1f;
+    public bool RegularMaterial = false;
+    public bool RegularPosition = true;
 
     [Header("Haptic")]
     public float HapticIntervalLimit = 0.15f;
