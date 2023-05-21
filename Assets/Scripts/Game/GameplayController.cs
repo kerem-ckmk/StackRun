@@ -31,6 +31,7 @@ public class GameplayController : MonoBehaviour
     public void PrepareGameplay(int linearLevelIndex)
     {
         levelManager.CreateLevel(linearLevelIndex);
+        playerController.Prepare();
     }
 
     public void UnloadGameplay()
@@ -42,8 +43,8 @@ public class GameplayController : MonoBehaviour
 
     public void StartGameplay()
     {
-        playerController.SetActiveState(true);
         stackManager.SetActiveState(true);
+        playerController.StartGameplay();
         IsActive = true;
     }
 
@@ -51,12 +52,12 @@ public class GameplayController : MonoBehaviour
     {
         IsActive = false;
         playerController.SetActiveState(false);
-
         OnGameplayFinished?.Invoke(success);
     }
 
     private void StackManager_OnFailed()
     {
+        playerController.FailedGameplay();
         FinishGameplay(false);
     }
 

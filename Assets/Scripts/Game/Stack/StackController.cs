@@ -44,6 +44,12 @@ public class StackController : MonoBehaviour
         CalculateExcess();
     }
 
+    private void OnDestroy()
+    {
+        OnCreateNewStack = null;
+        OnFailed = null;
+    }
+
     public void CalculateTransform()
     {
         Vector3 previousScale;

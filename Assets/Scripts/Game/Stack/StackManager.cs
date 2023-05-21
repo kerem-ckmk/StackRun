@@ -43,6 +43,11 @@ public class StackManager : MonoBehaviour
         IsActive = false;
         ActiveStackController = null;
         _previousStackController = null;
+
+        foreach (var stackController in StackControllers)
+            Destroy(stackController.gameObject);
+
+        StackControllers.Clear();
     }
 
 

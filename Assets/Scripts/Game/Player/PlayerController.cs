@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
@@ -25,13 +26,29 @@ public class PlayerController : MonoBehaviour
         IsInitialized = true;
     }
 
+    public void Prepare()
+    {
+        transform.position = Vector3.zero;
+        ChangeAnimationState(AnimationState.Idle);
+    }
+
+    public void StartGameplay()
+    {
+        SetActiveState(true);
+        ChangeAnimationState(AnimationState.Run);
+    }
+
+    public void FailedGameplay()
+    {
+        SetActiveState(false);
+        ChangeAnimationState(AnimationState.Idle);
+    }
+
     public void SetActiveState(bool isActive)
     {
         if (IsActive == isActive)
             return;
 
-        AnimationState animationState = IsActive ? AnimationState.Run : AnimationState.Idle;
-        ChangeAnimationState(animationState);
         IsActive = isActive;
     }
 
@@ -61,7 +78,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ChangeAnimationState(AnimationState newState)
+    public void ChangeAnimationState(AnimationState newState)
     {
         if (_currentAnimationState == newState)
             return;
