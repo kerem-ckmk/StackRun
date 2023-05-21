@@ -1,5 +1,7 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static StackManager;
 
 public class StackController : MonoBehaviour
@@ -12,27 +14,20 @@ public class StackController : MonoBehaviour
     public bool IsStop { get; private set; }
 
     private Vector3 _direction;
-    private float _speed;
-    private StackManager.PositionStatus _currentPositionStatus;
+    private PositionStatus _currentPositionStatus;
     private Material _material;
-    public event Action OnCreateNewStack;
-    
+    private StackController _previousStackController;
 
-    public void Initialize(float positionZ, float scaleX, float scaleZ, StackManager.PositionStatus positionStatus, Material stackMaterial)
+    public event Action OnCreateNewStack;
+
+    public void Initialize(StackController previousStackController, PositionStatus positionStatus, Material stackMaterial)
     {
+        _previousStackController = previousStackController;
         _material = stackMaterial;
         visualRenderer.sharedMaterial = _material;
         _currentPositionStatus = positionStatus;
-        ChoosePosition(positionZ);
 
-         _speed = GameConfigs.Instance.PlayerMoveSpeed * 2f;
-
-        startCollider.transform.localScale = new Vector3(scaleX, 1f, 1f);
-        startCollider.enabled = true;
-        endCollider.transform.localScale = new Vector3(scaleX, 1f, 1f);
-        endCollider.enabled = true;
-
-        stackVisual.localScale = new Vector3(scaleX, 1f, scaleZ);
+        CalculateTransform();
 
         IsStop = false;
         IsInitialized = true;
@@ -41,11 +36,33 @@ public class StackController : MonoBehaviour
     public void StopStack()
     {
         IsStop = true;
+
+        CalculateExcess();
     }
 
-    public void ChoosePosition(float positionZ)
+    public void CalculateTransform()
     {
-        float positionX = _currentPositionStatus == StackManager.PositionStatus.Left ? 
+        Vector3 previousScale;
+        float positionZ;
+
+        if (_previousStackController == null)
+        {
+            previousScale = new Vector3(GameConfigs.Instance.StackScaleX, stackVisual.localScale.y, GameConfigs.Instance.StackScaleZ);
+            positionZ = previousScale.z * 10f;
+        }
+        else
+        {
+            previousScale = _previousStackController.stackVisual.localScale;
+            positionZ = _previousStackController.transform.position.z + GameConfigs.Instance.StackScaleZ * 10f;
+        }
+
+        startCollider.transform.localScale = new Vector3(previousScale.x, 1f, 1f);
+        startCollider.enabled = true;
+        endCollider.transform.localScale = new Vector3(previousScale.x, 1f, 1f);
+        endCollider.enabled = true;
+        stackVisual.localScale = new Vector3(previousScale.x, 1f, previousScale.z);
+
+        float positionX = _currentPositionStatus == PositionStatus.Left ?
             -GameConfigs.Instance.DistanceCenter : GameConfigs.Instance.DistanceCenter;
 
         _direction = _currentPositionStatus == PositionStatus.Left ? transform.right : -transform.right;
@@ -59,13 +76,37 @@ public class StackController : MonoBehaviour
         OnCreateNewStack?.Invoke();
     }
 
-
     private void Update()
     {
         if (!IsInitialized || IsStop)
             return;
 
-        transform.position = Vector3.Lerp(transform.position, transform.position + _direction, Time.deltaTime * _speed);
+        transform.position = Vector3.Lerp(transform.position, transform.position + _direction, Time.deltaTime * GameConfigs.Instance.StackMoveSpeed);
+    }
+
+    public void ShrinkObject(float excessDistance)
+    {
+        //float shrinkFactor = 1f - excessDistance / stackVisual.localScale.x;
+        //stackVisual.localScale = new Vector3(stackVisual.localScale.x * shrinkFactor, stackVisual.localScale.y, stackVisual.localScale.z);
+        //transform.position = new Vector3(transform.position.x - excessDistance / 2f, transform.position.y, transform.position.z);
+    }
+
+    public void CalculateExcess()
+    {
+        float centerX = transform.position.x * 0.1f;
+        float previousCenterX = _previousStackController == null ? 0f : _previousStackController.transform.position.x * 0.1f;
+        float excess = previousCenterX - centerX;
+
+        float newScaleX = stackVisual.localScale.x - Mathf.Abs(excess);
+        stackVisual.SetLocalScaleX(newScaleX);
+
+        float newPositionX = transform.position.x;
+
+        if (excess < 0f)
+            newPositionX -= Mathf.Abs(excess) * 10f * 0.5f;
+        else
+            newPositionX += Mathf.Abs(excess) * 10f * 0.5f;
+
+        transform.SetPositionX(newPositionX);
     }
 }
-

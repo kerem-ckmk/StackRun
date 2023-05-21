@@ -17,6 +17,7 @@ public class GameConfigs : ScriptableObject
     public float PlayerMoveSpeed = 10f;
 
     [Header("Stack")]
+    public float StackMoveSpeed = 10f;
     public float DistanceCenter = 5f;
     public float StackScaleX = 1f;
     public float StackScaleZ = 1f;

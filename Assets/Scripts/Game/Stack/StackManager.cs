@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+
 public class StackManager : MonoBehaviour
 {
     [Header("References")]
@@ -9,23 +9,17 @@ public class StackManager : MonoBehaviour
     public List<StackController> StackControllers { get; private set; }
     public bool IsInitialized { get; private set; }
     public bool IsActive { get; private set; }
-    public StackController LastStackController { get; private set; }
+    public StackController ActiveStackController { get; private set; }
 
-    private float _scaleX;
-    private float _scaleZ;
-    private bool _regularMaterial;
-    private bool _regularPosition;
     private int _materialIndex = -1;
     private PositionStatus _lastPosition;
+    private StackController _previousStackController;
+
     public void Initialize()
     {
         StackControllers = new List<StackController>();
         StackControllers.Clear();
-
-        _scaleX = GameConfigs.Instance.StackScaleX;
-        _scaleZ = GameConfigs.Instance.StackScaleZ;
-        _regularMaterial = GameConfigs.Instance.RegularMaterial;
-        _regularPosition = GameConfigs.Instance.RegularPosition;
+        _previousStackController = null;
 
         IsInitialized = true;
     }
@@ -35,7 +29,7 @@ public class StackManager : MonoBehaviour
         if (IsActive == isActive)
             return;
 
-        LastStackController = SpawnStackController(_scaleZ * 10f, _scaleX);
+        ActiveStackController = SpawnStackController();
         IsActive = isActive;
     }
 
@@ -43,11 +37,9 @@ public class StackManager : MonoBehaviour
     {
         _materialIndex = -1;
         IsActive = false;
-        LastStackController = null;
-        _scaleX = GameConfigs.Instance.StackScaleX;
-        _scaleZ = GameConfigs.Instance.StackScaleZ;
+        ActiveStackController = null;
+        _previousStackController = null;
     }
-
 
     private void Update()
     {
@@ -56,31 +48,35 @@ public class StackManager : MonoBehaviour
 
     }
 
-    public StackController SpawnStackController(float positionZ, float scaleX)
+    public StackController SpawnStackController()
     {
         StackController stackControllerObject = null;
 
         foreach (StackController stackController in StackControllers)
+        {
             if (!stackController.gameObject.activeSelf)
             {
                 stackControllerObject = stackController;
                 break;
             }
+        }
 
         if (stackControllerObject == null)
+        {
             stackControllerObject = CreateStackController();
+        }
 
-        stackControllerObject.Initialize(positionZ, scaleX, _scaleZ, Positioner(), StackMaterial());
+        stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial());
         stackControllerObject.OnCreateNewStack += StackControllerObject_OnCreateNewStack;
+
+        _previousStackController = stackControllerObject;
+
         return stackControllerObject;
     }
 
     private void StackControllerObject_OnCreateNewStack()
     {
-        float positionZ = LastStackController.transform.position.z + _scaleZ * 10f;
-        float scaleX = LastStackController.transform.localScale.x;
-
-        LastStackController = SpawnStackController(positionZ, scaleX);
+        ActiveStackController = SpawnStackController();
     }
 
     private StackController CreateStackController()
@@ -92,14 +88,14 @@ public class StackManager : MonoBehaviour
 
     public void StopLastStack()
     {
-        LastStackController.StopStack();
+        ActiveStackController.StopStack();
     }
 
     public Material StackMaterial()
     {
         Material material = null;
 
-        if (_regularMaterial)
+        if (GameConfigs.Instance.RegularMaterial)
         {
             _materialIndex += 1;
             _materialIndex %= stackMaterials.Length - 1;
@@ -107,9 +103,11 @@ public class StackManager : MonoBehaviour
         }
         else
         {
-            int materialIndex; 
+            int materialIndex;
             do
+            {
                 materialIndex = UnityEngine.Random.Range(0, stackMaterials.Length);
+            }
             while (_materialIndex == materialIndex);
 
             _materialIndex = materialIndex;
@@ -123,13 +121,15 @@ public class StackManager : MonoBehaviour
     {
         PositionStatus status;
 
-        if (!_regularPosition)
+        if (!GameConfigs.Instance.RegularPosition)
         {
             int random = UnityEngine.Random.Range(0, 10);
             status = random % 2 == 0 ? PositionStatus.Left : PositionStatus.Right;
         }
         else
+        {
             status = _lastPosition == PositionStatus.Left ? PositionStatus.Right : PositionStatus.Left;
+        }
 
         _lastPosition = status;
 
@@ -141,5 +141,4 @@ public class StackManager : MonoBehaviour
         Left,
         Right
     }
-
 }
