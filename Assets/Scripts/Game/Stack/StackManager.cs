@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,9 +12,12 @@ public class StackManager : MonoBehaviour
     public bool IsActive { get; private set; }
     public StackController ActiveStackController { get; private set; }
 
+    public event Action OnFailed;
+
     private int _materialIndex = -1;
     private PositionStatus _lastPosition;
     private StackController _previousStackController;
+    
 
     public void Initialize()
     {
@@ -41,12 +45,6 @@ public class StackManager : MonoBehaviour
         _previousStackController = null;
     }
 
-    private void Update()
-    {
-        if (!IsInitialized || IsActive)
-            return;
-
-    }
 
     public StackController SpawnStackController()
     {
@@ -68,10 +66,16 @@ public class StackManager : MonoBehaviour
 
         stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial());
         stackControllerObject.OnCreateNewStack += StackControllerObject_OnCreateNewStack;
+        stackControllerObject.OnFailed += StackControllerObject_OnFailed;
 
         _previousStackController = stackControllerObject;
 
         return stackControllerObject;
+    }
+
+    private void StackControllerObject_OnFailed()
+    {
+        OnFailed?.Invoke();
     }
 
     private void StackControllerObject_OnCreateNewStack()

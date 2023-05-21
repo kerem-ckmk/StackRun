@@ -30,7 +30,8 @@ public class PlayerController : MonoBehaviour
         if (IsActive == isActive)
             return;
 
-        ChangeAnimationState(AnimationState.Run);
+        AnimationState animationState = IsActive ? AnimationState.Run : AnimationState.Idle;
+        ChangeAnimationState(animationState);
         IsActive = isActive;
     }
 

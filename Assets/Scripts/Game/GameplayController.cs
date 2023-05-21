@@ -24,6 +24,7 @@ public class GameplayController : MonoBehaviour
         levelManager.Initialize();
         playerController.Initialize();
         stackManager.Initialize();
+        stackManager.OnFailed += StackManager_OnFailed;
         IsInitialized = true;
     }
 
@@ -49,8 +50,14 @@ public class GameplayController : MonoBehaviour
     private void FinishGameplay(bool success)
     {
         IsActive = false;
+        playerController.SetActiveState(false);
 
         OnGameplayFinished?.Invoke(success);
+    }
+
+    private void StackManager_OnFailed()
+    {
+        FinishGameplay(false);
     }
 
     private void Update()

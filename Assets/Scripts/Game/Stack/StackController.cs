@@ -10,6 +10,7 @@ public class StackController : MonoBehaviour
     public Renderer visualRenderer;
     public Collider startCollider;
     public Collider endCollider;
+    public CutObjectController cutObjectController;
     public bool IsInitialized { get; private set; }
     public bool IsStop { get; private set; }
 
@@ -19,9 +20,12 @@ public class StackController : MonoBehaviour
     private StackController _previousStackController;
 
     public event Action OnCreateNewStack;
+    public event Action OnFailed;
 
     public void Initialize(StackController previousStackController, PositionStatus positionStatus, Material stackMaterial)
     {
+        cutObjectController.gameObject.SetActive(false);
+
         _previousStackController = previousStackController;
         _material = stackMaterial;
         visualRenderer.sharedMaterial = _material;
@@ -84,29 +88,42 @@ public class StackController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, transform.position + _direction, Time.deltaTime * GameConfigs.Instance.StackMoveSpeed);
     }
 
-    public void ShrinkObject(float excessDistance)
-    {
-        //float shrinkFactor = 1f - excessDistance / stackVisual.localScale.x;
-        //stackVisual.localScale = new Vector3(stackVisual.localScale.x * shrinkFactor, stackVisual.localScale.y, stackVisual.localScale.z);
-        //transform.position = new Vector3(transform.position.x - excessDistance / 2f, transform.position.y, transform.position.z);
-    }
-
     public void CalculateExcess()
     {
         float centerX = transform.position.x * 0.1f;
         float previousCenterX = _previousStackController == null ? 0f : _previousStackController.transform.position.x * 0.1f;
+        float previousScaleX = _previousStackController == null ? 1f : _previousStackController.stackVisual.localScale.x;
         float excess = previousCenterX - centerX;
+
+        float newPositionX = transform.position.x;
+        float cutObjectPositionX;
+
+        if (Mathf.Abs(excess) > previousScaleX)
+        {
+            cutObjectController.SetTransform(stackVisual.localScale.x, transform.position.x, _material);
+            cutObjectController.gameObject.SetActive(true); 
+            stackVisual.gameObject.SetActive(false);
+            OnFailed?.Invoke();
+            return;
+        }
 
         float newScaleX = stackVisual.localScale.x - Mathf.Abs(excess);
         stackVisual.SetLocalScaleX(newScaleX);
 
-        float newPositionX = transform.position.x;
-
         if (excess < 0f)
+        {
             newPositionX -= Mathf.Abs(excess) * 10f * 0.5f;
+           // cutObjectPositionX = newPositionX + (newScaleX * 0.5f * 10f) + (excess * 0.5f * 10f);
+        }
         else
+        {
             newPositionX += Mathf.Abs(excess) * 10f * 0.5f;
+          //  cutObjectPositionX = newPositionX - (newScaleX * 0.5f * 10f) - (excess * 0.5f * 10f);
+        }
+          
 
         transform.SetPositionX(newPositionX);
+
+
     }
 }
