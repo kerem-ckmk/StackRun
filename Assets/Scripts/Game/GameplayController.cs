@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Lofelt.NiceVibrations;
-using AlmostEngine.Examples;
 
 public class GameplayController : MonoBehaviour
 {

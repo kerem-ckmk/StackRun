@@ -145,6 +145,7 @@ public class StackController : MonoBehaviour
         {
             newPositionX = _previousStackController == null ? 0f : _previousStackController.transform.position.x;
             NewStackCenter?.Invoke(transform.position, true);
+            transform.SetPositionX(newPositionX);
             return;
         }
 

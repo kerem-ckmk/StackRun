@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Lofelt.NiceVibrations;
+using System;
 using UnityEngine;
-using Lofelt.NiceVibrations;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour

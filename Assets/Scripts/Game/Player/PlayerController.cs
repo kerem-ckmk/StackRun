@@ -1,11 +1,6 @@
 using DG.Tweening;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -71,6 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         _fail = false;
         playerRigidbody.isKinematic = true;
+        _failSequence?.Kill();
         _finishSequence?.Kill();
         IsActive = false;
         animator.Rebind();

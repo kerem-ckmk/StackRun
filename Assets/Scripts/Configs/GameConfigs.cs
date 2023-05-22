@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New GameConfigs", menuName = "Raising Game/Game Configs", order = 1)]
