@@ -18,15 +18,13 @@ public class StackController : MonoBehaviour
     private Material _material;
     private StackController _previousStackController;
     private bool _failed;
-    private float _finishPositionZ;
 
     public event Action OnCreateNewStack;
-    public event Action<Vector3> NewStackCenter;
+    public event Action<Vector3, bool> NewStackCenter;
     public event Action OnFailed;
 
-    public void Initialize(StackController previousStackController, PositionStatus positionStatus, Material stackMaterial, float finishPositionZ)
+    public void Initialize(StackController previousStackController, PositionStatus positionStatus, Material stackMaterial)
     {
-        _finishPositionZ = finishPositionZ;
         cutObjectController.gameObject.SetActive(false);
 
         _previousStackController = previousStackController;
@@ -135,6 +133,7 @@ public class StackController : MonoBehaviour
     {
         float previousScaleX = _previousStackController == null ? 1f : _previousStackController.stackVisual.localScale.x;
         float excess = CalculateExcess();
+        float newPositionX;
 
         if (Mathf.Abs(excess) > previousScaleX)
         {
@@ -142,13 +141,20 @@ public class StackController : MonoBehaviour
             return;
         }
 
+        if (Mathf.Abs(excess) < 0.03f)
+        {
+            newPositionX = _previousStackController == null ? 0f : _previousStackController.transform.position.x;
+            NewStackCenter?.Invoke(transform.position, true);
+            return;
+        }
+
         float newScaleX = stackVisual.localScale.x - Mathf.Abs(excess);
         stackVisual.SetLocalScaleX(newScaleX);
-        float newPositionX = CalculateNewPositionX(excess);
+        newPositionX = CalculateNewPositionX(excess);
         float cutObjectPositionX = CalculateCutObjectPositionX(excess, newScaleX, newPositionX);
 
         transform.SetPositionX(newPositionX);
-        NewStackCenter?.Invoke(transform.position);
+        NewStackCenter?.Invoke(transform.position, false);
 
         cutObjectController.SetTransform(Mathf.Abs(excess), cutObjectPositionX, _material);
     }

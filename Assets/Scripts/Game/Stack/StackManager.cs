@@ -19,6 +19,7 @@ public class StackManager : MonoBehaviour
     private PositionStatus _lastPosition;
     private StackController _previousStackController;
     private float _finishPositionZ;
+    private int _perfectCounter;
 
     public void Initialize()
     {
@@ -76,7 +77,7 @@ public class StackManager : MonoBehaviour
             stackControllerObject = CreateStackController();
         }
 
-        stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial(), _finishPositionZ);
+        stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial());
         stackControllerObject.OnCreateNewStack += StackControllerObject_OnCreateNewStack;
         stackControllerObject.OnFailed += StackControllerObject_OnFailed;
         stackControllerObject.NewStackCenter += StackControllerObject_NewStackCenter;
@@ -86,8 +87,18 @@ public class StackManager : MonoBehaviour
         return stackControllerObject;
     }
 
-    private void StackControllerObject_NewStackCenter(Vector3 stackCenter)
+    private void StackControllerObject_NewStackCenter(Vector3 stackCenter, bool perfect)
     {
+        if (perfect)
+        {
+            _perfectCounter += 1;
+            float pitch = 1 - _perfectCounter * 0.1f;
+            pitch = Mathf.Min(pitch, 0.1f);
+
+            GameManager.PlaySound(GameConfigs.Instance.StackSound, 0.7f, pitch);
+        }
+
+        _perfectCounter = 0;
         NewCenter?.Invoke(stackCenter);
     }
 

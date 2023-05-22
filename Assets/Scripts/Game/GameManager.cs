@@ -193,13 +193,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void PlaySound(AudioClip audioClip, float volume = 0.4f, bool dominate = false)
+    public static void PlaySound(AudioClip audioClip, float volume = 0.4f, float pitch = 1f, bool dominate = false)
     {
         if (Instance == null)
             return;
 
         if (dominate || Time.time - Instance._lastSoundTime >= Instance.gameConfigs.SoundIntervalLimit)
         {
+            Instance.AudioSource.pitch = pitch;
             Instance.AudioSource.volume = volume * GameConfigs.Instance.SoundVolumeMultiplier;
             Instance.AudioSource.PlayOneShot(audioClip);
             Instance._lastSoundTime = Time.time;

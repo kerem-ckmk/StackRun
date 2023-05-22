@@ -41,7 +41,7 @@ public class GameConfigs : ScriptableObject
     public float SoundVolume = 0.5f;
     public float SoundVolumeMultiplier = 1f;
     public AudioClip ButtonSound;
-
+    public AudioClip StackSound;
     public void Initialize()
     {
         Debug.Assert(Instance == null);
