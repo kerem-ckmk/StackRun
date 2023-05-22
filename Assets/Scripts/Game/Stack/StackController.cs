@@ -1,8 +1,5 @@
 using System;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static StackManager;
 
 public class StackController : MonoBehaviour
@@ -12,6 +9,7 @@ public class StackController : MonoBehaviour
     public Collider startCollider;
     public Collider endCollider;
     public CutObjectController cutObjectController;
+
     public bool IsInitialized { get; private set; }
     public bool IsStop { get; private set; }
 
@@ -54,7 +52,7 @@ public class StackController : MonoBehaviour
         NewStackCenter = null;
     }
 
-    public void CalculateTransform()
+    private void CalculateTransform()
     {
         Vector3 previousScale;
         float positionZ;
@@ -107,7 +105,7 @@ public class StackController : MonoBehaviour
             HandleExcess();
     }
 
-    public bool CheckFail()
+    private bool CheckFail()
     {
         bool fail = false;
         float excess = CalculateExcess();
@@ -126,7 +124,7 @@ public class StackController : MonoBehaviour
         return fail;
     }
 
-    public void CreateCutObject()
+    private void CreateCutObject()
     {
         float previousScaleX = _previousStackController == null ? 1f : _previousStackController.stackVisual.localScale.x;
         float excess = CalculateExcess();
@@ -146,7 +144,6 @@ public class StackController : MonoBehaviour
         NewStackCenter?.Invoke(transform.position);
 
         cutObjectController.SetTransform(Mathf.Abs(excess), cutObjectPositionX, _material);
-
     }
 
     private float CalculateExcess()
