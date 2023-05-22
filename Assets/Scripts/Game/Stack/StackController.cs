@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static StackManager;
@@ -18,6 +19,7 @@ public class StackController : MonoBehaviour
     private PositionStatus _currentPositionStatus;
     private Material _material;
     private StackController _previousStackController;
+    private bool _failed;
 
     public event Action OnCreateNewStack;
     public event Action<Vector3> NewStackCenter;
@@ -95,18 +97,43 @@ public class StackController : MonoBehaviour
             return;
 
         transform.position = Vector3.Lerp(transform.position, transform.position + _direction, Time.deltaTime * GameConfigs.Instance.StackMoveSpeed);
+
+        if (_failed)
+            return;
+
+        bool checkFail = CheckFail();
+
+        if (checkFail)
+            HandleExcess();
+    }
+
+    public bool CheckFail()
+    {
+        bool fail = false;
+        float excess = CalculateExcess();
+
+        if (_currentPositionStatus == PositionStatus.Right)
+        {
+            if (excess > stackVisual.localScale.x)
+                fail = true;
+        }
+        else if (_currentPositionStatus == PositionStatus.Left)
+        {
+            if (excess < 0 && Mathf.Abs(excess) > stackVisual.localScale.x)
+                fail = true;
+        }
+
+        return fail;
     }
 
     public void CreateCutObject()
     {
-        float centerX = transform.position.x * 0.1f;
-        float previousCenterX = _previousStackController == null ? 0f : _previousStackController.transform.position.x * 0.1f;
         float previousScaleX = _previousStackController == null ? 1f : _previousStackController.stackVisual.localScale.x;
-        float excess = previousCenterX - centerX;
+        float excess = CalculateExcess();
 
         if (Mathf.Abs(excess) > previousScaleX)
         {
-            HandleExcess(excess);
+            HandleExcess();
             return;
         }
 
@@ -122,8 +149,21 @@ public class StackController : MonoBehaviour
 
     }
 
-    private void HandleExcess(float excess)
+    private float CalculateExcess()
     {
+        float centerX = transform.position.x * 0.1f;
+        float previousCenterX = _previousStackController == null ? 0f : _previousStackController.transform.position.x * 0.1f;
+        float excess = previousCenterX - centerX;
+
+        return excess;
+    }
+
+    private void HandleExcess()
+    {
+        if (_failed)
+            return;
+
+        _failed = true;
         cutObjectController.SetTransform(stackVisual.localScale.x, transform.position.x, _material);
         stackVisual.gameObject.SetActive(false);
         OnFailed?.Invoke();
@@ -149,7 +189,7 @@ public class StackController : MonoBehaviour
             cutObjectPositionX = newPositionX + (newScaleX * 0.5f * 10f) + Mathf.Abs(excess * 0.5f * 10f);
         else
             cutObjectPositionX = newPositionX - (newScaleX * 0.5f * 10f) - Mathf.Abs(excess * 0.5f * 10f);
-        
+
         return cutObjectPositionX;
     }
 }
