@@ -29,3 +29,4 @@ MonoBehaviour:
   SoundVolume: 0.5
   SoundVolumeMultiplier: 1
   ButtonSound: {fileID: 8300000, guid: bea93be202e08264c9408827e26bc565, type: 3}
+  StackSound: {fileID: 8300000, guid: d4500edc42952064db2b91acc5664663, type: 3}
