@@ -47,6 +47,7 @@ public class StackManager : MonoBehaviour
 
     public void UnloadLevel()
     {
+        _perfectCounter = 0;
         _materialIndex = -1;
         IsActive = false;
         ActiveStackController = null;
@@ -96,6 +97,8 @@ public class StackManager : MonoBehaviour
             pitch = Mathf.Min(pitch, 5f);
 
             GameManager.PlaySound(GameConfigs.Instance.StackSound, 0.7f, pitch);
+            NewCenter?.Invoke(stackCenter);
+            return;
         }
 
         _perfectCounter = 0;
