@@ -68,9 +68,7 @@ public class StackController : MonoBehaviour
             positionZ = _previousStackController.transform.position.z + GameConfigs.Instance.StackScaleZ * 10f;
         }
 
-        startCollider.transform.localScale = new Vector3(previousScale.x, 1f, 1f);
         startCollider.enabled = true;
-        endCollider.transform.localScale = new Vector3(previousScale.x, 1f, 1f);
         endCollider.enabled = true;
         cutObjectController.transform.SetLocalScaleZ(previousScale.z);
         stackVisual.localScale = new Vector3(previousScale.x, 1f, previousScale.z);

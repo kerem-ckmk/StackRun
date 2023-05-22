@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
     public void Prepare()
     {
-        _targetPosition = Vector3.forward * 10f;
+        _targetPosition = Vector3.forward * 10f * GameConfigs.Instance.StackScaleZ;
         transform.rotation = Quaternion.identity;
         transform.position = Vector3.zero;
         ChangeAnimationState(AnimationState.Idle);
@@ -78,8 +78,16 @@ public class PlayerController : MonoBehaviour
         if (!IsInitialized || !IsActive)
             return;
 
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (!IsInitialized || !IsActive)
+            return;
+
         Vector3 direction = _targetPosition - transform.position;
-        float moveSpeed = Time.deltaTime * GameConfigs.Instance.PlayerMoveSpeed;
+        float moveSpeed = Time.fixedDeltaTime * GameConfigs.Instance.PlayerMoveSpeed;
         Vector3 newPosition = transform.position + direction.normalized * moveSpeed;
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -109,6 +117,7 @@ public class PlayerController : MonoBehaviour
             if (!_fail)
                 return;
 
+            _fail = true;
             var stackController = other.GetComponentInParent<StackController>();
             stackController.TriggeredEndCollider();
 
@@ -120,6 +129,7 @@ public class PlayerController : MonoBehaviour
             if (!_fail)
                 return;
 
+            _fail = true;
             var otherCollider = other.GetComponent<Collider>();
             otherCollider.enabled = false;
 
@@ -144,7 +154,7 @@ public class PlayerController : MonoBehaviour
 
     private void FinishGame()
     {
-        float newPositionZ = transform.position.z +( 2f * GameConfigs.Instance.StackScaleZ);
+        float newPositionZ = transform.position.z + (2f * GameConfigs.Instance.StackScaleZ);
 
         _finishSequence?.Kill();
         _finishSequence = DOTween.Sequence();
