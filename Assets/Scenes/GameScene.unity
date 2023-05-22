@@ -2364,6 +2364,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1771699497}
     m_Modifications:
+    - target: {fileID: 483963195, guid: 3cb282ec828d65a44929234f2ef918a2, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6234733785320663732, guid: 3cb282ec828d65a44929234f2ef918a2,
         type: 3}
       propertyPath: m_Name
@@ -5483,7 +5487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 3
+  m_BindingMode: 4
   m_FollowOffset: {x: 0, y: 22, z: -23}
   m_XDamping: 0
   m_YDamping: 0
@@ -5492,7 +5496,7 @@ MonoBehaviour:
   m_PitchDamping: 0
   m_YawDamping: 0
   m_RollDamping: 0
-  m_AngularDamping: 1
+  m_AngularDamping: 0
 --- !u!114 &1008338881
 MonoBehaviour:
   m_ObjectHideFlags: 3
