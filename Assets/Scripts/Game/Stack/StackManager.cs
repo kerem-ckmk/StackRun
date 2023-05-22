@@ -92,8 +92,8 @@ public class StackManager : MonoBehaviour
         if (perfect)
         {
             _perfectCounter += 1;
-            float pitch = 1 + _perfectCounter * 0.2f;
-            pitch = Mathf.Max(2.4f, pitch);
+            float pitch = 1 + _perfectCounter * 0.4f;
+            pitch = Mathf.Min(pitch, 5f);
 
             GameManager.PlaySound(GameConfigs.Instance.StackSound, 0.7f, pitch);
         }
