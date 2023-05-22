@@ -23,6 +23,7 @@ public class CameraController : MonoBehaviour
 
     public void Prepare(float finishTargetZ)
     {
+        playerCamera.enabled = true;
         _finishGame = false;
 
         _blend.m_Time = 0f;
@@ -51,5 +52,10 @@ public class CameraController : MonoBehaviour
         if (IsInitialized || _finishGame)
             finishCameraTarget.Rotate(Vector3.up * GameConfigs.Instance.CameraRotationSpeed * Time.deltaTime);
 
+    }
+
+    public void FailedGameplay()
+    {
+        playerCamera.enabled = false;
     }
 }

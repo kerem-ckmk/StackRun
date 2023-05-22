@@ -67,6 +67,7 @@ public class GameplayController : MonoBehaviour
     private void StackManager_OnFailed()
     {
         playerController.FailedGameplay();
+        cameraController.FailedGameplay();
         FinishGameplay(false);
     }
 
