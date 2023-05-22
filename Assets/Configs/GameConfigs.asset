@@ -16,7 +16,7 @@ MonoBehaviour:
   StartingMoney: 0
   CameraRotationSpeed: 15
   PlayerMoveSpeed: 30
-  StackMoveSpeed: 20
+  StackMoveSpeed: 25
   DistanceCenter: 20
   StackScaleX: 1
   StackScaleZ: 1.2

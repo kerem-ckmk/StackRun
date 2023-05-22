@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     private AnimationState _currentAnimationState;
     private Vector3 _targetPosition;
     private Sequence _finishSequence;
+    private Sequence _failSequence;
+    private bool _fail;
 
     public event Action WinPlayer;
 
@@ -49,8 +51,7 @@ public class PlayerController : MonoBehaviour
 
     public void FailedGameplay()
     {
-        SetActiveState(false);
-        ChangeAnimationState(AnimationState.Idle);
+        _fail = true;
     }
 
     public void SetActiveState(bool isActive)
@@ -68,6 +69,8 @@ public class PlayerController : MonoBehaviour
 
     public void UnloadLevel()
     {
+        _fail = false;
+        playerRigidbody.isKinematic = true;
         _finishSequence?.Kill();
         IsActive = false;
         animator.Rebind();
@@ -94,7 +97,7 @@ public class PlayerController : MonoBehaviour
         {
             var stackController = other.GetComponentInParent<StackController>();
             stackController.TriggeredStartCollider();
-            _targetPosition += Vector3.forward * 15f;
+            _targetPosition += Vector3.forward * GameConfigs.Instance.StackScaleZ * 15f;
         }
 
         if (other.gameObject.layer == TagsAndLayers.FinishIndex)
@@ -104,11 +107,48 @@ public class PlayerController : MonoBehaviour
             SetActiveState(false);
             FinishGame();
         }
+
+        if (other.gameObject.layer == TagsAndLayers.StackEndIndex)
+        {
+            if (!_fail)
+                return;
+
+            var stackController = other.GetComponentInParent<StackController>();
+            stackController.TriggeredEndCollider();
+
+            FallPlayer();
+        }
+
+        if (other.gameObject.layer == TagsAndLayers.FirstPlatformIndex)
+        {
+            if (!_fail)
+                return;
+
+            var otherCollider = other.GetComponent<Collider>();
+            otherCollider.enabled = false;
+
+            FallPlayer();
+        }
+    }
+
+    private void FallPlayer()
+    {
+        SetActiveState(false);
+
+        float _targetZ = transform.position.z + (5f * GameConfigs.Instance.StackScaleZ);
+        _failSequence?.Kill();
+        _failSequence = DOTween.Sequence();
+        _failSequence.Append(transform.DOMoveZ(_targetZ, 0.65f).SetEase(Ease.Linear));
+        _failSequence.AppendCallback(() =>
+        {
+            playerRigidbody.isKinematic = false;
+            ChangeAnimationState(AnimationState.Fall);
+        });
     }
 
     private void FinishGame()
     {
-        float newPositionZ = transform.position.z + 2f;
+        float newPositionZ = transform.position.z +( 2f * GameConfigs.Instance.StackScaleZ);
 
         _finishSequence?.Kill();
         _finishSequence = DOTween.Sequence();

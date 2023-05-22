@@ -25,4 +25,7 @@ public static class TagsAndLayers
 
     public static string Finish = "Finish";
     public static int FinishIndex = LayerMask.NameToLayer(Finish);
+
+    public static string FirstPlatform = "FirstPlatform";
+    public static int FirstPlatformIndex = LayerMask.NameToLayer(FirstPlatform);
 }

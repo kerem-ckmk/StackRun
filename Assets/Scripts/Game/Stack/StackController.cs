@@ -91,6 +91,11 @@ public class StackController : MonoBehaviour
         OnCreateNewStack?.Invoke();
     }
 
+    public void TriggeredEndCollider()
+    {
+        endCollider.enabled = false;
+    }
+
     private void Update()
     {
         if (!IsInitialized || IsStop)
