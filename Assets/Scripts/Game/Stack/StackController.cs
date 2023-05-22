@@ -70,6 +70,7 @@ public class StackController : MonoBehaviour
         startCollider.enabled = true;
         endCollider.transform.localScale = new Vector3(previousScale.x, 1f, 1f);
         endCollider.enabled = true;
+        cutObjectController.transform.SetLocalScaleZ(previousScale.z);
         stackVisual.localScale = new Vector3(previousScale.x, 1f, previousScale.z);
 
         float positionX = _currentPositionStatus == PositionStatus.Left ?
@@ -107,7 +108,6 @@ public class StackController : MonoBehaviour
         if (Mathf.Abs(excess) > previousScaleX)
         {
             cutObjectController.SetTransform(stackVisual.localScale.x, transform.position.x, _material);
-            cutObjectController.gameObject.SetActive(true); 
             stackVisual.gameObject.SetActive(false);
             OnFailed?.Invoke();
             return;
@@ -115,21 +115,18 @@ public class StackController : MonoBehaviour
 
         float newScaleX = stackVisual.localScale.x - Mathf.Abs(excess);
         stackVisual.SetLocalScaleX(newScaleX);
-
         if (excess < 0f)
         {
             newPositionX -= Mathf.Abs(excess) * 10f * 0.5f;
-           // cutObjectPositionX = newPositionX + (newScaleX * 0.5f * 10f) + (excess * 0.5f * 10f);
+            cutObjectPositionX = newPositionX + (newScaleX * 0.5f * 10f) + Mathf.Abs(excess * 0.5f * 10f);
         }
         else
         {
             newPositionX += Mathf.Abs(excess) * 10f * 0.5f;
-          //  cutObjectPositionX = newPositionX - (newScaleX * 0.5f * 10f) - (excess * 0.5f * 10f);
+            cutObjectPositionX = newPositionX - (newScaleX * 0.5f * 10f) - Mathf.Abs(excess * 0.5f * 10f);
         }
-          
 
         transform.SetPositionX(newPositionX);
-
-
+        cutObjectController.SetTransform(Mathf.Abs(excess), cutObjectPositionX, _material);
     }
 }

@@ -13,6 +13,7 @@ public class CutObjectController : MonoBehaviour
         visual.sharedMaterial = material;
         transform.SetPositionX(positionX);
         transform.SetLocalScaleX(scaleX);
+        gameObject.SetActive(true);
     }
     public void OnEnable()
     {
