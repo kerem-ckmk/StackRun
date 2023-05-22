@@ -22,4 +22,7 @@ public static class TagsAndLayers
 
     public static string StackEnd = "StackEnd";
     public static int StackEndIndex = LayerMask.NameToLayer(StackEnd);
+
+    public static string Finish = "Finish";
+    public static int FinishIndex = LayerMask.NameToLayer(Finish);
 }

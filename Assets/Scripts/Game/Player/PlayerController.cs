@@ -1,8 +1,10 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     private AnimationState _currentAnimationState;
     private Vector3 _targetPosition;
+    private Sequence _finishSequence;
 
     public void Initialize()
     {
@@ -62,6 +65,7 @@ public class PlayerController : MonoBehaviour
 
     public void UnloadLevel()
     {
+        _finishSequence?.Kill();
         IsActive = false;
         animator.Rebind();
         animator.Update(0f);
@@ -76,7 +80,7 @@ public class PlayerController : MonoBehaviour
         float moveSpeed = Time.deltaTime * GameConfigs.Instance.PlayerMoveSpeed;
         Vector3 newPosition = transform.position + direction.normalized * moveSpeed;
 
-        Quaternion targetRotation= Quaternion.LookRotation(direction);
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
         playerRigidbody.rotation = Quaternion.Lerp(transform.rotation, targetRotation, moveSpeed);
         playerRigidbody.MovePosition(newPosition);
     }
@@ -87,8 +91,28 @@ public class PlayerController : MonoBehaviour
         {
             var stackController = other.GetComponentInParent<StackController>();
             stackController.TriggeredStartCollider();
-            _targetPosition += Vector3.forward * 10f;
+            _targetPosition += Vector3.forward * 15f;
         }
+
+        if (other.gameObject.layer == TagsAndLayers.FinishIndex)
+        {
+            var finishController = other.GetComponentInParent<FinishController>();
+            finishController.TriggerFinishCollider();
+            SetActiveState(false);
+            FinishGame();
+        }
+    }
+
+    private void FinishGame()
+    {
+        float newPositionZ = transform.position.z + 1f;
+
+        _finishSequence?.Kill();
+        _finishSequence = DOTween.Sequence();
+        _finishSequence.Append(transform.DOMoveZ(newPositionZ, 0.3f).SetEase(Ease.Linear));
+        _finishSequence.AppendCallback(() => ChangeAnimationState(AnimationState.Dance));
+        _finishSequence.Append(transform.DORotate(Vector3.up * 180f, 0.4f).SetEase(Ease.Linear));
+        _finishSequence.Play();
     }
 
     public void ChangeAnimationState(AnimationState newState)

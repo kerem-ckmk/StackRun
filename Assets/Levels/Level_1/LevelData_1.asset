@@ -15,3 +15,4 @@ MonoBehaviour:
   ID: 1
   LevelPrefab: {fileID: 1659121235621639595, guid: c6ba6fbe4a043ab459bb55bfdc9cb746,
     type: 3}
+  StackCount: 3

@@ -18,7 +18,7 @@ public class StackManager : MonoBehaviour
     private int _materialIndex = -1;
     private PositionStatus _lastPosition;
     private StackController _previousStackController;
-    
+    private float _finishPositionZ;
 
     public void Initialize()
     {
@@ -27,6 +27,12 @@ public class StackManager : MonoBehaviour
         _previousStackController = null;
 
         IsInitialized = true;
+    }
+
+    public void Prepare(float stackCountForFinish)
+    {
+        float finishPosition = stackCountForFinish * GameConfigs.Instance.StackScaleZ * 10f;
+        _finishPositionZ = finishPosition;
     }
 
     public void SetActiveState(bool isActive)
@@ -70,7 +76,7 @@ public class StackManager : MonoBehaviour
             stackControllerObject = CreateStackController();
         }
 
-        stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial());
+        stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial(), _finishPositionZ);
         stackControllerObject.OnCreateNewStack += StackControllerObject_OnCreateNewStack;
         stackControllerObject.OnFailed += StackControllerObject_OnFailed;
         stackControllerObject.NewStackCenter += StackControllerObject_NewStackCenter;
@@ -92,6 +98,12 @@ public class StackManager : MonoBehaviour
 
     private void StackControllerObject_OnCreateNewStack()
     {
+        float lastPositionStack = _previousStackController.transform.position.z;
+        lastPositionStack += (GameConfigs.Instance.StackScaleZ * 10f * 0.5f) + (GameConfigs.Instance.StackScaleZ * 10f);
+
+        if (lastPositionStack >= _finishPositionZ)
+            return;
+
         ActiveStackController = SpawnStackController();
     }
 

@@ -35,7 +35,7 @@ public class LevelManager : MonoBehaviour
         levelObject.transform.localScale = Vector3.one;
 
         var level = levelObject.GetComponent<Level>();
-        level.Initialize();
+        level.Initialize(CurrentLevelData.StackCount);
 
         CurrentLevelInstance = level;
     }

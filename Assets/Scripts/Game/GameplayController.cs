@@ -37,6 +37,7 @@ public class GameplayController : MonoBehaviour
     public void PrepareGameplay(int linearLevelIndex)
     {
         levelManager.CreateLevel(linearLevelIndex);
+        stackManager.Prepare(levelManager.CurrentLevelData.StackCount);
         playerController.Prepare();
     }
 
@@ -57,7 +58,6 @@ public class GameplayController : MonoBehaviour
     private void FinishGameplay(bool success)
     {
         IsActive = false;
-        playerController.SetActiveState(false);
         OnGameplayFinished?.Invoke(success);
     }
 

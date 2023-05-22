@@ -7,4 +7,5 @@ public class LevelData : ScriptableObject
 {
     public int ID;
     public Level LevelPrefab;
+    public float StackCount;
 }

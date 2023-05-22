@@ -18,13 +18,15 @@ public class StackController : MonoBehaviour
     private Material _material;
     private StackController _previousStackController;
     private bool _failed;
+    private float _finishPositionZ;
 
     public event Action OnCreateNewStack;
     public event Action<Vector3> NewStackCenter;
     public event Action OnFailed;
 
-    public void Initialize(StackController previousStackController, PositionStatus positionStatus, Material stackMaterial)
+    public void Initialize(StackController previousStackController, PositionStatus positionStatus, Material stackMaterial, float finishPositionZ)
     {
+        _finishPositionZ = finishPositionZ;
         cutObjectController.gameObject.SetActive(false);
 
         _previousStackController = previousStackController;
