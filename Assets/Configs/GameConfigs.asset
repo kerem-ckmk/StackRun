@@ -15,11 +15,11 @@ MonoBehaviour:
   LevelSkipCountAtRepeat: 0
   StartingMoney: 0
   CameraRotationSpeed: 15
-  PlayerMoveSpeed: 10
+  PlayerMoveSpeed: 13
   StackMoveSpeed: 20
-  DistanceCenter: 20
+  DistanceCenter: 15
   StackScaleX: 1
-  StackScaleZ: 1.7
+  StackScaleZ: 2
   RegularMaterial: 0
   RegularPosition: 1
   HapticIntervalLimit: 0.15
