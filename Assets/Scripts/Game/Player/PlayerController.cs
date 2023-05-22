@@ -105,11 +105,11 @@ public class PlayerController : MonoBehaviour
 
     private void FinishGame()
     {
-        float newPositionZ = transform.position.z + 1f;
+        float newPositionZ = transform.position.z + 2f;
 
         _finishSequence?.Kill();
         _finishSequence = DOTween.Sequence();
-        _finishSequence.Append(transform.DOMoveZ(newPositionZ, 0.3f).SetEase(Ease.Linear));
+        _finishSequence.Append(transform.DOMoveZ(newPositionZ, 0.4f).SetEase(Ease.Linear));
         _finishSequence.AppendCallback(() => ChangeAnimationState(AnimationState.Dance));
         _finishSequence.Append(transform.DORotate(Vector3.up * 180f, 0.4f).SetEase(Ease.Linear));
         _finishSequence.Play();
