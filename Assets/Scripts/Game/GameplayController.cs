@@ -25,7 +25,13 @@ public class GameplayController : MonoBehaviour
         playerController.Initialize();
         stackManager.Initialize();
         stackManager.OnFailed += StackManager_OnFailed;
+        stackManager.NewCenter += StackManager_NewCenter;
         IsInitialized = true;
+    }
+
+    private void StackManager_NewCenter(Vector3 targetCenter)
+    {
+        playerController.SetTransformCenter(targetCenter);
     }
 
     public void PrepareGameplay(int linearLevelIndex)

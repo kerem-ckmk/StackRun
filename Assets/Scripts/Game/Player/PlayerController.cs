@@ -16,9 +16,10 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public Rigidbody playerRigidbody;
     public bool IsInitialized { get; private set; }
-    public Vector3 Direction { get; private set; }
     public bool IsActive { get; private set; }
+
     private AnimationState _currentAnimationState;
+    private Vector3 _targetPosition;
 
     public void Initialize()
     {
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
 
     public void Prepare()
     {
+        _targetPosition = Vector3.forward * 10f;
+        transform.rotation = Quaternion.identity;
         transform.position = Vector3.zero;
         ChangeAnimationState(AnimationState.Idle);
     }
@@ -52,6 +55,11 @@ public class PlayerController : MonoBehaviour
         IsActive = isActive;
     }
 
+    public void SetTransformCenter(Vector3 center)
+    {
+        _targetPosition = center;
+    }
+
     public void UnloadLevel()
     {
         IsActive = false;
@@ -64,9 +72,13 @@ public class PlayerController : MonoBehaviour
         if (!IsInitialized || !IsActive)
             return;
 
-        Vector3 targetPosition = transform.position + transform.forward;
-        targetPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * GameConfigs.Instance.PlayerMoveSpeed);
-        playerRigidbody.MovePosition(targetPosition);
+        Vector3 direction = _targetPosition - transform.position;
+        float moveSpeed = Time.deltaTime * GameConfigs.Instance.PlayerMoveSpeed;
+        Vector3 newPosition = transform.position + direction.normalized * moveSpeed;
+
+        Quaternion targetRotation= Quaternion.LookRotation(direction);
+        playerRigidbody.rotation = Quaternion.Lerp(transform.rotation, targetRotation, moveSpeed);
+        playerRigidbody.MovePosition(newPosition);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -75,6 +87,7 @@ public class PlayerController : MonoBehaviour
         {
             var stackController = other.GetComponentInParent<StackController>();
             stackController.TriggeredStartCollider();
+            _targetPosition += Vector3.forward * 10f;
         }
     }
 

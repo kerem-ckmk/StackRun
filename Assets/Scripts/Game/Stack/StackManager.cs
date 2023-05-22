@@ -13,6 +13,7 @@ public class StackManager : MonoBehaviour
     public StackController ActiveStackController { get; private set; }
 
     public event Action OnFailed;
+    public event Action<Vector3> NewCenter;
 
     private int _materialIndex = -1;
     private PositionStatus _lastPosition;
@@ -72,10 +73,16 @@ public class StackManager : MonoBehaviour
         stackControllerObject.Initialize(_previousStackController, Positioner(), StackMaterial());
         stackControllerObject.OnCreateNewStack += StackControllerObject_OnCreateNewStack;
         stackControllerObject.OnFailed += StackControllerObject_OnFailed;
+        stackControllerObject.NewStackCenter += StackControllerObject_NewStackCenter;
 
         _previousStackController = stackControllerObject;
 
         return stackControllerObject;
+    }
+
+    private void StackControllerObject_NewStackCenter(Vector3 stackCenter)
+    {
+        NewCenter?.Invoke(stackCenter);
     }
 
     private void StackControllerObject_OnFailed()
