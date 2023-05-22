@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Lofelt.NiceVibrations;
+using AlmostEngine.Examples;
 
 public class GameplayController : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameplayController : MonoBehaviour
     public LevelManager levelManager;
     public PlayerController playerController;
     public StackManager stackManager;
+    public CameraController cameraController;
 
     public bool IsInitialized { get; private set; }
     public bool IsActive { get; private set; }
@@ -23,22 +25,23 @@ public class GameplayController : MonoBehaviour
     {
         levelManager.Initialize();
         playerController.Initialize();
+        playerController.WinPlayer += PlayerController_WinPlayer;
         stackManager.Initialize();
+        cameraController.Initialize();
         stackManager.OnFailed += StackManager_OnFailed;
         stackManager.NewCenter += StackManager_NewCenter;
         IsInitialized = true;
     }
 
-    private void StackManager_NewCenter(Vector3 targetCenter)
-    {
-        playerController.SetTransformCenter(targetCenter);
-    }
 
     public void PrepareGameplay(int linearLevelIndex)
     {
         levelManager.CreateLevel(linearLevelIndex);
         stackManager.Prepare(levelManager.CurrentLevelData.StackCount);
         playerController.Prepare();
+
+        float cameraTargetPositionZ = levelManager.CurrentLevelInstance.finishController.transform.position.z;
+        cameraController.Prepare(cameraTargetPositionZ);
     }
 
     public void UnloadGameplay()
@@ -65,6 +68,17 @@ public class GameplayController : MonoBehaviour
     {
         playerController.FailedGameplay();
         FinishGameplay(false);
+    }
+
+    private void PlayerController_WinPlayer()
+    {
+        cameraController.FinishGame();
+        FinishGameplay(true);
+    }
+
+    private void StackManager_NewCenter(Vector3 targetCenter)
+    {
+        playerController.SetTransformCenter(targetCenter);
     }
 
     private void Update()

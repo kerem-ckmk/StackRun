@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
     private AnimationState _currentAnimationState;
     private Vector3 _targetPosition;
     private Sequence _finishSequence;
+
+    public event Action WinPlayer;
 
     public void Initialize()
     {
@@ -113,6 +116,8 @@ public class PlayerController : MonoBehaviour
         _finishSequence.AppendCallback(() => ChangeAnimationState(AnimationState.Dance));
         _finishSequence.Append(transform.DORotate(Vector3.up * 180f, 0.4f).SetEase(Ease.Linear));
         _finishSequence.Play();
+
+        WinPlayer?.Invoke();
     }
 
     public void ChangeAnimationState(AnimationState newState)

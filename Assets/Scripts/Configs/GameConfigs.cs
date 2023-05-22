@@ -13,6 +13,9 @@ public class GameConfigs : ScriptableObject
     [Header("Economy")]
     public int StartingMoney = 0;
 
+    [Header("Camera")]
+    public float CameraRotationSpeed = 20f;
+
     [Header("Player")]
     public float PlayerMoveSpeed = 10f;
 
