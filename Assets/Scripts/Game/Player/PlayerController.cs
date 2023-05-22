@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         SetActiveState(false);
 
-        float _targetZ = transform.position.z + (5f * GameConfigs.Instance.StackScaleZ);
+        float _targetZ = transform.position.z + 4f;
         _failSequence?.Kill();
         _failSequence = DOTween.Sequence();
         _failSequence.Append(transform.DOMoveZ(_targetZ, 0.65f).SetEase(Ease.Linear));
