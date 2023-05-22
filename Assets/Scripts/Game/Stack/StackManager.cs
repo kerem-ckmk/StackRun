@@ -99,7 +99,7 @@ public class StackManager : MonoBehaviour
     private void StackControllerObject_OnCreateNewStack()
     {
         float lastPositionStack = _previousStackController.transform.position.z;
-        lastPositionStack += (GameConfigs.Instance.StackScaleZ * 10f * 0.5f) + (GameConfigs.Instance.StackScaleZ * 10f);
+        lastPositionStack += GameConfigs.Instance.StackScaleZ * 10f * 0.5f;
 
         if (lastPositionStack >= _finishPositionZ)
             return;

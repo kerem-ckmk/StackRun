@@ -12,6 +12,7 @@ public class FinishController : MonoBehaviour
     {
         transform.SetLocalScaleX(scaleX);
 
+        stackCount += 1;
         float positionZ = (stackCount * GameConfigs.Instance.StackScaleZ * 10f) + visual.transform.localScale.z * 0.5f;
         transform.SetPositionZ(positionZ);
 
