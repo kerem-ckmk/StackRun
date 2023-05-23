@@ -54,6 +54,9 @@ public class GameplayController : MonoBehaviour
     {
         stackManager.SetActiveState(true);
         playerController.StartGameplay();
+
+        GameManager.PlaySound(GameConfigs.Instance.ButtonSound);
+
         IsActive = true;
     }
 

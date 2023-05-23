@@ -29,10 +29,10 @@ MonoBehaviour:
   AddCurrencyCheatAmount: 5000
   EnableCursorImage: 0
   SoundIntervalLimit: 0.1
-  SoundVolume: 0.5
+  SoundVolume: 0.6
   SoundVolumeMultiplier: 1
   ButtonSound: {fileID: 8300000, guid: bea93be202e08264c9408827e26bc565, type: 3}
-  StackSound: {fileID: 8300000, guid: d4500edc42952064db2b91acc5664663, type: 3}
+  StackSound: {fileID: 8300000, guid: fe7b9a8dd23d19042bd2f479a9ae023b, type: 3}
   CollectableSounds:
   - {fileID: 8300000, guid: 32de89504d7fdd64d9686add1a46e16e, type: 3}
   - {fileID: 8300000, guid: d4500edc42952064db2b91acc5664663, type: 3}

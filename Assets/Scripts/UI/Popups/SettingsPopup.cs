@@ -30,15 +30,18 @@ public class SettingsPopup : UIPanel
     private void CloseButtonClicked()
     {
         HidePanel();
+        GameManager.PlaySound(GameConfigs.Instance.ButtonSound);
     }
 
     private void PrivacyPolicyButtonClicked()
     {
         Application.OpenURL("https://rollicgames.com/privacy");
+        GameManager.PlaySound(GameConfigs.Instance.ButtonSound);
     }
 
     private void VibrationToggleValueChanged(bool value)
     {
+        GameManager.PlaySound(GameConfigs.Instance.ButtonSound);
         GameManager.IsVibrationEnabled = value;
     }
 }
