@@ -14,14 +14,15 @@ public class GameplayController : MonoBehaviour
 
     public int TotalCurrencyReward
     {
-        get { return 100; }
+        get { return 100 + _currencyReward; }
     }
 
     public Action<bool> OnGameplayFinished;
-
+    private int _currencyReward;
     public void Initialize()
     {
         levelManager.Initialize();
+        levelManager.AddingAmount += LevelManager_AddingAmount;
         playerController.Initialize();
         playerController.WinPlayer += PlayerController_WinPlayer;
         stackManager.Initialize();
@@ -30,7 +31,6 @@ public class GameplayController : MonoBehaviour
         stackManager.NewCenter += StackManager_NewCenter;
         IsInitialized = true;
     }
-
 
     public void PrepareGameplay(int linearLevelIndex)
     {
@@ -44,6 +44,7 @@ public class GameplayController : MonoBehaviour
 
     public void UnloadGameplay()
     {
+        _currencyReward = 0;
         levelManager.UnloadLevel();
         playerController.UnloadLevel();
         stackManager.UnloadLevel();
@@ -78,6 +79,11 @@ public class GameplayController : MonoBehaviour
     private void StackManager_NewCenter(Vector3 targetCenter)
     {
         playerController.SetTransformCenter(targetCenter);
+    }
+
+    private void LevelManager_AddingAmount(int addingAmount)
+    {
+        _currencyReward += addingAmount;
     }
 
     private void Update()

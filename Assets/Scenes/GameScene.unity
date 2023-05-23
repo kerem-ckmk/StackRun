@@ -2395,14 +2395,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1771699497}
     m_Modifications:
-    - target: {fileID: 483963195, guid: 3cb282ec828d65a44929234f2ef918a2, type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 483963195, guid: 3cb282ec828d65a44929234f2ef918a2, type: 3}
-      propertyPath: m_Interpolate
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6234733785320663732, guid: 3cb282ec828d65a44929234f2ef918a2,
         type: 3}
       propertyPath: m_Name
@@ -6966,52 +6958,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194984072}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1196495093
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1196495094}
-  - component: {fileID: 1196495095}
-  m_Layer: 0
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1196495094
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196495093}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 483963194}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1196495095
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196495093}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 1
-  m_Height: 5
-  m_Direction: 1
-  m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!1 &1220691416
 GameObject:
   m_ObjectHideFlags: 0
@@ -7957,8 +7903,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cecd249d60e6c6d44aef840eb756b638, type: 2}
   - {fileID: 11400000, guid: 06fb45b9c2678644e9e35cd3426e33a1, type: 2}
   - {fileID: 11400000, guid: 091a17a64e97af240a8dba9c5f01c1e3, type: 2}
-  enableTestLevel: 0
-  testLevel: {fileID: 0}
+  enableTestLevel: 1
+  testLevel: {fileID: 11400000, guid: 091a17a64e97af240a8dba9c5f01c1e3, type: 2}
 --- !u!1 &1370839019
 GameObject:
   m_ObjectHideFlags: 0

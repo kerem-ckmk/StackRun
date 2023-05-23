@@ -25,6 +25,11 @@ public class GameConfigs : ScriptableObject
     public bool RegularMaterial = false;
     public bool RegularPosition = true;
 
+    [Header("Collectable")]
+    public int GoldPrice = 50;
+    public int StarPrice = 150;
+    public int DiamondPrice = 250;
+
     [Header("Haptic")]
     public float HapticIntervalLimit = 0.15f;
 
@@ -40,6 +45,7 @@ public class GameConfigs : ScriptableObject
     public float SoundVolumeMultiplier = 1f;
     public AudioClip ButtonSound;
     public AudioClip StackSound;
+    public AudioClip[] CollectableSounds;
     public void Initialize()
     {
         Debug.Assert(Instance == null);

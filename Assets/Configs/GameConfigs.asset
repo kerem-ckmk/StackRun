@@ -22,6 +22,9 @@ MonoBehaviour:
   StackScaleZ: 2
   RegularMaterial: 0
   RegularPosition: 1
+  GoldPrice: 50
+  StarPrice: 150
+  DiamondPrice: 250
   HapticIntervalLimit: 0.15
   AddCurrencyCheatAmount: 5000
   EnableCursorImage: 0
@@ -30,3 +33,6 @@ MonoBehaviour:
   SoundVolumeMultiplier: 1
   ButtonSound: {fileID: 8300000, guid: bea93be202e08264c9408827e26bc565, type: 3}
   StackSound: {fileID: 8300000, guid: d4500edc42952064db2b91acc5664663, type: 3}
+  CollectableSounds:
+  - {fileID: 8300000, guid: 32de89504d7fdd64d9686add1a46e16e, type: 3}
+  - {fileID: 8300000, guid: d4500edc42952064db2b91acc5664663, type: 3}

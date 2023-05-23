@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class LevelManager : MonoBehaviour
         get { return CurrentLevelData?.ID ?? -1; }
     }
 
+    public event Action<int> AddingAmount;
     public void Initialize()
     {
 
@@ -36,8 +38,13 @@ public class LevelManager : MonoBehaviour
 
         var level = levelObject.GetComponent<Level>();
         level.Initialize(CurrentLevelData.StackCount);
-
+        level.OnAddingAmount += Level_AddingAmount;
         CurrentLevelInstance = level;
+    }
+
+    private void Level_AddingAmount(int addingAmount)
+    {
+        AddingAmount?.Invoke(addingAmount);
     }
 
     public void UnloadLevel()

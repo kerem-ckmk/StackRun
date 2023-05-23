@@ -28,4 +28,7 @@ public static class TagsAndLayers
 
     public static string FirstPlatform = "FirstPlatform";
     public static int FirstPlatformIndex = LayerMask.NameToLayer(FirstPlatform);
+
+    public static string Collectable = "Collectable";
+    public static int CollectableIndex = LayerMask.NameToLayer(Collectable);
 }

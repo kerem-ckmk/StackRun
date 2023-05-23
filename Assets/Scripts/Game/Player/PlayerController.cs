@@ -135,6 +135,12 @@ public class PlayerController : MonoBehaviour
 
             FallPlayer();
         }
+
+        if (other.gameObject.layer == TagsAndLayers.CollectableIndex)
+        {
+            var collectableBase = other.GetComponentInParent<CollectableBase>();
+            collectableBase.TriggeredPlayer();
+        }
     }
 
     private void FallPlayer()
