@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using static StackManager;
+using DG.Tweening;
 
 public class StackController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class StackController : MonoBehaviour
     private Material _material;
     private StackController _previousStackController;
     private bool _failed;
+    private Sequence _sequence;
 
     public event Action OnCreateNewStack;
     public event Action<Vector3, bool> NewStackCenter;
@@ -47,6 +49,8 @@ public class StackController : MonoBehaviour
 
     private void OnDestroy()
     {
+        _sequence?.Kill();
+        _sequence = null;
         OnCreateNewStack = null;
         OnFailed = null;
         NewStackCenter = null;
@@ -141,6 +145,7 @@ public class StackController : MonoBehaviour
 
         if (Mathf.Abs(excess) < 0.03f)
         {
+            DockingAnimation();
             newPositionX = _previousStackController == null ? 0f : _previousStackController.transform.position.x;
             NewStackCenter?.Invoke(transform.position, true);
             transform.SetPositionX(newPositionX);
@@ -156,15 +161,20 @@ public class StackController : MonoBehaviour
         NewStackCenter?.Invoke(transform.position, false);
 
         cutObjectController.SetTransform(Mathf.Abs(excess), cutObjectPositionX, _material);
+
+        DockingAnimation();
     }
 
-    private float CalculateExcess()
+    private void DockingAnimation()
     {
-        float centerX = transform.position.x * 0.1f;
-        float previousCenterX = _previousStackController == null ? 0f : _previousStackController.transform.position.x * 0.1f;
-        float excess = previousCenterX - centerX;
+        float firstPositionY = stackVisual.localPosition.y - 1f;
+        float lastPositionY = stackVisual.localPosition.y;
 
-        return excess;
+        _sequence?.Kill();
+        _sequence = DOTween.Sequence();
+        _sequence.Append(stackVisual.DOLocalMoveY(firstPositionY, 0.4f).SetEase(Ease.OutQuint));
+        _sequence.Append(stackVisual.DOLocalMoveY(lastPositionY, 0.2f).SetEase(Ease.InQuint));
+        _sequence.Play();
     }
 
     private void HandleExcess()
@@ -200,5 +210,14 @@ public class StackController : MonoBehaviour
             cutObjectPositionX = newPositionX - (newScaleX * 0.5f * 10f) - Mathf.Abs(excess * 0.5f * 10f);
 
         return cutObjectPositionX;
+    }
+
+    private float CalculateExcess()
+    {
+        float centerX = transform.position.x * 0.1f;
+        float previousCenterX = _previousStackController == null ? 0f : _previousStackController.transform.position.x * 0.1f;
+        float excess = previousCenterX - centerX;
+
+        return excess;
     }
 }
