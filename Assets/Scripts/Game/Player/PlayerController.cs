@@ -13,6 +13,12 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public Animator animator;
     public Rigidbody playerRigidbody;
+
+    public bool CheckClick
+    {
+        get { return _checkClick; }
+        set { _checkClick = value; }
+    }
     public bool IsInitialized { get; private set; }
     public bool IsActive { get; private set; }
 
@@ -21,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private Sequence _finishSequence;
     private Sequence _failSequence;
     private bool _fail;
+    private bool _checkClick;
 
     public event Action WinPlayer;
 
@@ -99,6 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.layer == TagsAndLayers.StackStartIndex)
         {
+            CheckClick = false;
             var stackController = other.GetComponentInParent<StackController>();
             stackController.TriggeredStartCollider();
             _targetPosition += Vector3.forward * GameConfigs.Instance.StackScaleZ * 15f;
@@ -114,7 +122,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.layer == TagsAndLayers.StackEndIndex)
         {
-            if (!_fail)
+            if (!_fail && _checkClick)
                 return;
 
             _fail = true;
@@ -126,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.layer == TagsAndLayers.FirstPlatformIndex)
         {
-            if (!_fail)
+            if (!_fail && _checkClick)
                 return;
 
             _fail = true;

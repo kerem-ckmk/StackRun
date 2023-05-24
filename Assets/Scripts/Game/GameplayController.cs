@@ -96,6 +96,7 @@ public class GameplayController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            playerController.CheckClick = true;
             stackManager.StopLastStack();
         }
 
